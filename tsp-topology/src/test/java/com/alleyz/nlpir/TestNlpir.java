@@ -1,6 +1,6 @@
 package com.alleyz.nlpir;
 
-import com.alleyz.nplir.NLPIRUtil;
+import com.alleyz.tsp.nplir.NLPIRUtil;
 
 /**
  * Created by zhaihw on 2017/5/4.

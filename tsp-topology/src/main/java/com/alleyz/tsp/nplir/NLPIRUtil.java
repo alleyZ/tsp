@@ -4,8 +4,6 @@ package com.alleyz.tsp.nplir;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Structure;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -398,7 +396,6 @@ public class NLPIRUtil {
          */
         String NLPIR_GetLastErrorMsg();
 
-        @Getter @Setter
         public class Result extends Structure{
             public int start;
             public int length;

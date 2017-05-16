@@ -5,4 +5,9 @@ package com.alleyz.tsp.topo;
  *
  */
 public class TxtTopology {
+
+
+    public static void main(String[] args) {
+
+    }
 }

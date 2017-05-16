@@ -1,6 +1,7 @@
 package com.alleyz.tsp.config;
 
-import lombok.extern.log4j.Log4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -9,8 +10,8 @@ import java.util.Properties;
  * Created by alleyz on 2017/5/5.
  *
  */
-@Log4j
 public class ConfigUtil {
+    private static Logger logger = LoggerFactory.getLogger(ConfigUtil.class);
     private ConfigUtil (){}
     private static String fileName = "/application.properties";
     private static Properties prop = null;
@@ -25,7 +26,7 @@ public class ConfigUtil {
         try {
             prop.load(ConfigUtil.class.getResourceAsStream(configFiles));
         }catch (IOException e) {
-            log.error("Can`t find config file [" +  configFiles + "]", e);
+            logger.error("Can`t find config file [" +  configFiles + "]", e);
         }
         return prop;
     }
