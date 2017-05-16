@@ -1,4 +1,4 @@
-package com.alleyz.nplir;
+package com.alleyz.tsp.nplir;
 
 
 import com.sun.jna.Library;
@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import static com.alleyz.nplir.NLPIRUtil.EnCode.UTF8_CODE;
+import static com.alleyz.tsp.nplir.NLPIRUtil.EnCode.UTF8_CODE;
 import static java.io.File.separator;
 
 /**
