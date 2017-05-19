@@ -37,9 +37,12 @@ public class MultiProducer {
                 if(files != null  && files.length > 0) {
                     for (File file : files) {
                         if(executed.contains(file.getName())) continue;
+
                         try(BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)))){
-                            String line = br.readLine();
-                            queue.put(line);
+                            String line;
+                            while ((line = br.readLine()) != null)
+                                queue.put(line);
+                            executed.add(file.getName());
                         }catch (IOException | InterruptedException e){
                             log.error("Producer-Reader", e);
                         }
@@ -58,7 +61,7 @@ public class MultiProducer {
                         String line = queue.take();
                         int first = line.indexOf("&");
                         String rowKey = line.substring(0, first);
-                        producer.sendMsg(rowKey,line.substring(first));
+                        producer.sendMsg(rowKey,line.substring(first + 1));
                         System.out.println("send " + rowKey);
                     }catch (InterruptedException e) {
                         log.error(Thread.currentThread().getName(), e);

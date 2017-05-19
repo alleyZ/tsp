@@ -55,5 +55,4 @@ public class SimpleConsumer implements Closeable{
     public interface MsgHandler {
         void process(ConsumerRecords<String, String> crs);
     }
-
 }

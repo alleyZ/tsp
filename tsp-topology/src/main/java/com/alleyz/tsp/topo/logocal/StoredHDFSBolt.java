@@ -7,9 +7,14 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Tuple;
 import com.alleyz.tsp.config.ConfigUtil;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
 import java.util.Map;
 
 import static com.alleyz.tsp.constant.Constant.DELIMITER_BLOCK;
@@ -72,22 +77,17 @@ public class StoredHDFSBolt implements IBasicBolt{
                     return;
             }
             System.out.println("hdfs-" + content);
-//            try {
-//                Path path = new Path(realPath);
-////            try(){
-//                FileSystem fs = FileSystem.get(this.hadoopConf);
-//                FSDataOutputStream fos;
-//                if (!fs.exists(path)) {
-//                    fos = fs.create(path);
-//                } else {
-//                    fos = fs.append(path);
-//                }
-//                ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
-//                IOUtils.copyBytes(is, fos, 4096, true);
-//            }catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            }
+            Path path = new Path(realPath);
+            try(FileSystem fs = FileSystem.get(this.hadoopConf)){
+                FSDataOutputStream fos;
+                if (!fs.exists(path)) {
+                    fos = fs.create(path);
+                } else {
+                    fos = fs.append(path);
+                }
+                ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
+                IOUtils.copyBytes(is, fos, 4096, true);
+            }
         }catch (Exception e) {
             logger.error("yyyyyy", e);
             e.printStackTrace();

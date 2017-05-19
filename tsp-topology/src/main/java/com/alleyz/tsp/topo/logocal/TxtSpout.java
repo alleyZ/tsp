@@ -49,10 +49,8 @@ public class TxtSpout implements IRichSpout{
 
     @Override
     public void nextTuple() {
-        System.out.println("------------------------------");
         this.consumer.pollAndProcessMsg(crs -> {
             Iterator<ConsumerRecord<String, String>> iterator = crs.iterator();
-            System.out.println("+++++++++++++++++++++++++++++++++++++++++++");
             while (iterator.hasNext()){
                 ConsumerRecord<String, String> record = iterator.next();
                 String rowKey = record.key();

@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class Constant {
     private Constant(){}
-    public final static String TXT_MSG_TOPIC = "origin-txt";
+    public final static String TXT_MSG_TOPIC = "topic-origin";
 
     public final static String TXT_MSG_GROUP_TOPOLOGY = "jstorm-topology";
 
