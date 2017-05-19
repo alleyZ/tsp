@@ -3,7 +3,11 @@ package com.alleyz.tsp.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -29,6 +33,22 @@ public class ConfigUtil {
             logger.error("Can`t find config file [" +  configFiles + "]", e);
         }
         return prop;
+    }
+
+    public static Map<String, Object> prop2Map(Properties prop) {
+        Map<String, Object> maps = new HashMap<>();
+        prop.forEach((k, v) -> {
+            maps.put((String) k, v);
+        });
+        return maps;
+    }
+    public static Map<String, Object> prop2Map(String configFiles) {
+        Properties prop = getProp(configFiles);
+        Map<String, Object> maps = new HashMap<>();
+        prop.forEach((k, v) -> {
+            maps.put((String) k, v);
+        });
+        return maps;
     }
 
     /**
@@ -60,12 +80,32 @@ public class ConfigUtil {
     public static Integer getIntVal(String key, Integer defaults) {
         String val = getStrVal(key);
         if(val == null || "".equals(val)) return defaults;
-        return Integer.parseInt(key);
+        return Integer.parseInt(val);
+    }
+
+    public static Integer getIntVal(Map<String, Object> conf, String key, Integer defaults) {
+        String val = (String)conf.get(key);
+        if(val == null || "".equals(val)) return defaults;
+        return Integer.parseInt(val);
     }
 
     public static Long getLongVal(String key, Long defaults) {
         String val = getStrVal(key);
         if(val == null || "".equals(val)) return defaults;
         return Long.parseLong(val);
+    }
+
+    public static String getExpress(String file) throws IOException{
+        StringBuilder builder = new StringBuilder();
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(ConfigUtil.class.getResourceAsStream(file)))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.indexOf("#") == 0) continue;
+                if (line.length() > 0)
+                    builder.append(line);
+            }
+        }
+        return builder.toString();
     }
 }

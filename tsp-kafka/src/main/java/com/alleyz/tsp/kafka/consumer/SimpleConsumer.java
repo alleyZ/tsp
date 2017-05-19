@@ -26,7 +26,8 @@ public class SimpleConsumer implements Closeable{
         }
 
         this.consumer = new KafkaConsumer<>(prop);
-        consumer.subscribe(Collections.singletonList(topic));
+        this.consumer.subscribe(Collections.singletonList(topic));
+        this.consumer.metrics();
     }
 
     /**
@@ -34,13 +35,13 @@ public class SimpleConsumer implements Closeable{
      * @param handler 消息处理类
      */
     public void pollAndProcessMsg(MsgHandler handler){
-        while (true) {
+//        while (true) {
             logger.debug("AutoConsumer - startAccept: 接受消息");
             ConsumerRecords<String, String> crs = this.consumer.poll(pollInterval);
-            if(crs.isEmpty()) break;
+            if(crs.isEmpty()) return;
             handler.process(crs);
             this.consumer.commitSync();
-        }
+//        }
     }
 
     public void close() {

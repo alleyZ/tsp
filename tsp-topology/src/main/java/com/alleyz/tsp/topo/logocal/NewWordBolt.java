@@ -7,7 +7,6 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
-import backtype.storm.utils.TupleHelpers;
 import com.alleyz.tsp.nplir.NLPIRUtil;
 import com.alleyz.tsp.topo.constant.TopoConstant;
 import org.slf4j.Logger;
@@ -23,6 +22,7 @@ import static com.alleyz.tsp.topo.constant.TopoConstant.*;
  */
 public class NewWordBolt implements IBasicBolt {
     private static Logger logger = LoggerFactory.getLogger(NewWordBolt.class);
+    public static final String NAME = "newWord-bolt";
     @Override
     public void prepare(Map stormConf, TopologyContext context) {
 
@@ -30,10 +30,6 @@ public class NewWordBolt implements IBasicBolt {
 
     @Override
     public void execute(Tuple input, BasicOutputCollector collector) {
-        if (TupleHelpers.isTickTuple(input)) {
-            logger.debug("NewWordBolt - Receive one Ticket Tuple " + input.getSourceComponent());
-            return;
-        }
         if(TopoConstant.TOPOLOGY_STREAM_TXT_ID.equals(input.getSourceStreamId())) {
             String allTxt = input.getStringByField(TopoConstant.DEC_ALL_TXT);
             String newWords = NLPIRUtil.getNewWords(allTxt, 50, true);

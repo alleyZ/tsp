@@ -56,7 +56,10 @@ public class MultiProducer {
                 while (true) {
                     try {
                         String line = queue.take();
-                        producer.sendMsg(topic, line);
+                        int first = line.indexOf("&");
+                        String rowKey = line.substring(0, first);
+                        producer.sendMsg(rowKey,line.substring(first));
+                        System.out.println("send " + rowKey);
                     }catch (InterruptedException e) {
                         log.error(Thread.currentThread().getName(), e);
                     }
