@@ -2,12 +2,17 @@
 ### 说明
 > 将kafka中的消息接入到jstorm进行流式处理：
 
-```flow
-st=>start: TxtSpot
-nb=>operation:NewWordBolt
-e=end
-st -> nb -> e
 ```
+graph LR
+    START(开始) --> |订阅| MSG[消息] 
+    START -->  |首次| HasDic{redis有词典}
+    HasDic --> |有| Load[加载词典]
+    HasDic --> |没有| OVER
+    D{portal} -.发布.-> MSG
+    MSG --> Load
+    Load --> OVER(结束)
+```
+
 ### 项目结构
 #### tsp-kafka
 > 提供了`kafka-v0.10.2`的支持
