@@ -13,7 +13,7 @@
 #### tsp-topology
 > 流式处理拓扑图
 > `TxtSpout` 数据源，从kafka中拽去数据，接入到jstorm中
-> 
+
 ### 运行
 > 依赖： `maven`, `jdk8`, `kafka-0.10.2`, `jstorm-2.2.1`, `hadoop-cdh-5.5.4`
 1. 编译
