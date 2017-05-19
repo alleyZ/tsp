@@ -1,11 +1,13 @@
 ## TSP-(Txt-Stream-Process)
 ### 说明
 > 将kafka中的消息接入到jstorm进行流式处理：
-> 消息  -> 学习新词     -> redis -> hbfs
->       -> 分词         -> hdfs
->       -> 存储至Hbase  
->       -> 存储至HDFS
->       -> 质检         -> oracle
+
+```flow
+st=>start: TxtSpot
+nb=>operation:NewWordBolt
+e=end
+st -> nb -> e
+```
 ### 项目结构
 #### tsp-kafka
 > 提供了`kafka-v0.10.2`的支持
