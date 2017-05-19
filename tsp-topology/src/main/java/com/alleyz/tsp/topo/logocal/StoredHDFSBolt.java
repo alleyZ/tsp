@@ -37,7 +37,7 @@ public class StoredHDFSBolt implements IBasicBolt{
         this.hadoopConf = new Configuration();
         this.oriPath = ConfigUtil.getStrVal(PATH_HDFS_ORI);
         this.segPath = ConfigUtil.getStrVal(PATH_HDFS_SEG);
-        this.segPath = ConfigUtil.getStrVal(PATH_HDFS_NEW_WORD);
+        this.nwPath = ConfigUtil.getStrVal(PATH_HDFS_NEW_WORD);
 //        this.hadoopConf.set("fs.defaultFS", "hdfs://hd-29:8020");
         System.setProperty(HADOOP_USER_NAME, ConfigUtil.getStrVal(HADOOP_USER));
     }
