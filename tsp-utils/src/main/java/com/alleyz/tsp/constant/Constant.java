@@ -107,6 +107,9 @@ public class Constant {
     public static final String CUST_AGENT_TXT_H_QUA = agentContent;
     public static final String CUST_USER_TXT_H_QUE = userContent;
 
+    public static final String REDIS_KEY_NEW_WORD = "JNW";
+    public static final String REDIS_KEY_HOT_WORd = "JHW";
+
     /**
      * z消费时的偏移位置 有三种取值 latest earliest none
      */

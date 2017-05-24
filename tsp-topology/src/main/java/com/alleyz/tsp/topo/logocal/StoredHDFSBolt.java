@@ -24,7 +24,11 @@ import static com.alleyz.tsp.topo.constant.TopoConstant.*;
 /**
  * Created by alleyz on 2017/5/16.
  *
+ * Deprecated hdfs不支持并发append，
+ *  所以为提高整体吞吐量， 写文件bolt分离，单个写文件的的并行量 强制为1，否则会出错.
+ *
  */
+@Deprecated
 public class StoredHDFSBolt implements IBasicBolt{
     public static final String NAME = "hdfs-bolt";
     private static Logger logger = LoggerFactory.getLogger(StoredHDFSBolt.class);

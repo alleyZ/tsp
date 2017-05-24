@@ -11,7 +11,9 @@ public class TopoConstant {
     public final static String TOPOLOGY_STREAM_TXT_ID = "txt-spout-stream";
     public final static String TOPOLOGY_STREAM_NEW_WORD_ID = "new-word-stream";
     public final static String TOPOLOGY_STREAM_SEG_WORD_ID = "seg-word-stream";
+    public final static String TOPOLOGY_STREAM_HBASE_ID = "hbase-stream";
     public final static String TOPOLOGY_STREAM_QC_ID = "qc-stream";
+    public final static String TOPOLOGY_STREAM_STORE_ORI_ID = "store-ori-stream";
 
     public final static String DEC_ROW_KEY = "rowKey";
     public final static String DEC_BASIC_INFO = "basicInfo";
@@ -32,8 +34,11 @@ public class TopoConstant {
     public final static String TOPOLOGY_PARALLEL_BOLT_INDEX = "bolt.parallel.index";
     public final static String TOPOLOGY_PARALLEL_BOLT_NW = "bolt.parallel.newWord";
     public final static String TOPOLOGY_PARALLEL_BOLT_SEG = "bolt.parallel.seg";
-    public final static String TOPOLOGY_PARALLEL_BOLT_HDFS = "bolt.parallel.hdfs";
+    public final static String TOPOLOGY_PARALLEL_BOLT_STORE_NW = "bolt.parallel.storeNewWord";
+    public final static String TOPOLOGY_PARALLEL_BOLT_HBASE = "bolt.parallel.hbase";
     public final static String TOPOLOGY_PARALLEL_SPOUT = "spout.parallel";
+    public final static String TOPOLOGY_PARALLEL_QC = "bolt.parallel.qc";
+    public final static String TOPOLOGY_PARALLEL_ORACLE = "bolt.parallel.oracle";
 
 
     public final static String PATH_FORMAT_PROV = "{prov}";

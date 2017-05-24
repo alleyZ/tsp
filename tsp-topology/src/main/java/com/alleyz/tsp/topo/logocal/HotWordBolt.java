@@ -7,4 +7,5 @@ package com.alleyz.tsp.topo.logocal;
  *  输出：热词内容
  */
 public class HotWordBolt {
+
 }

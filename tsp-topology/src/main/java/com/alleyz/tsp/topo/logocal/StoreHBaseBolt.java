@@ -4,7 +4,9 @@ import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.IBasicBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
+import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
+import backtype.storm.tuple.Values;
 import com.alleyz.tsp.config.ConfigUtil;
 import com.alleyz.tsp.constant.Constant;
 import com.alleyz.tsp.topo.constant.TopoConstant;
@@ -16,18 +18,22 @@ import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Map;
 
 import static com.alleyz.tsp.constant.Constant.*;
+import static com.alleyz.tsp.topo.constant.TopoConstant.*;
 
 /**
  * Created by alleyz on 2017/5/16.
  *
  */
 public class StoreHBaseBolt implements IBasicBolt{
-
+    private static Logger logger = LoggerFactory.getLogger(StoreHBaseBolt.class);
+    public static final String NAME = "hbase-store";
     private Connection connection;
     private static byte[] infoFamily = Bytes.toBytes(CUST_INFO_H_FAMILY),
         txtFamily = Bytes.toBytes(CUST_TXT_H_FAMILY),
@@ -50,10 +56,10 @@ public class StoreHBaseBolt implements IBasicBolt{
     @Override
     public void execute(Tuple input, BasicOutputCollector collector) {
         if(TopoConstant.TOPOLOGY_STREAM_TXT_ID.equals(input.getSourceStreamId())) {
-            String rowKey = input.getStringByField(TopoConstant.DEC_ROW_KEY);
-            String basicInfo = input.getStringByField(TopoConstant.DEC_BASIC_INFO);
-            String agentTxt = input.getStringByField(TopoConstant.DEC_AGENT_TXT);
-            String userTxt = input.getStringByField(TopoConstant.DEC_USER_TXT);
+            String rowKey = input.getStringByField(DEC_ROW_KEY);
+            String basicInfo = input.getStringByField(DEC_BASIC_INFO);
+            String agentTxt = input.getStringByField(DEC_AGENT_TXT);
+            String userTxt = input.getStringByField(DEC_USER_TXT);
             String allTxt = input.getStringByField(TopoConstant.DEC_ALL_TXT);
             Put put = transfer2Put(rowKey, basicInfo, allTxt, agentTxt, userTxt);
             // 此table非线程安全 且使用完毕须关闭
@@ -63,6 +69,9 @@ public class StoreHBaseBolt implements IBasicBolt{
                 e.printStackTrace();
                 collector.reportError(e);
             }
+            collector.emit(TOPOLOGY_STREAM_HBASE_ID, new Values(
+                    rowKey, basicInfo, agentTxt, userTxt, allTxt
+            ));
         }
     }
 
@@ -77,12 +86,19 @@ public class StoreHBaseBolt implements IBasicBolt{
 
     @Override
     public void cleanup() {
-
+        try {
+            this.connection.close();
+        }catch (IOException e) {
+            logger.error("close hbase connection has err", e);
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-
+        declarer.declareStream(TopoConstant.TOPOLOGY_STREAM_HBASE_ID, new Fields(
+                DEC_ROW_KEY, DEC_BASIC_INFO, DEC_AGENT_TXT, DEC_USER_TXT, DEC_ALL_TXT
+        ));
     }
 
     @Override

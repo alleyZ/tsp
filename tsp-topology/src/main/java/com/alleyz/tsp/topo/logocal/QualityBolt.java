@@ -7,19 +7,12 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
-import com.alleyz.tsp.config.ConfigUtil;
-import com.alleyz.tsp.constant.Constant;
 import com.alleyz.tsp.topo.constant.TopoConstant;
-import com.ql.util.express.DefaultContext;
-import com.ql.util.express.ExpressRunner;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
-import static com.alleyz.tsp.topo.constant.TopoConstant.DEC_QC_ITEM;
-import static com.alleyz.tsp.topo.constant.TopoConstant.DEC_ROW_KEY;
-import static com.alleyz.tsp.topo.constant.TopoConstant.TOPOLOGY_STREAM_QC_ID;
+import static com.alleyz.tsp.topo.constant.TopoConstant.*;
 
 /**
  * Created by alleyz on 2017/5/16.
@@ -27,35 +20,31 @@ import static com.alleyz.tsp.topo.constant.TopoConstant.TOPOLOGY_STREAM_QC_ID;
  */
 public class QualityBolt implements IBasicBolt{
     public static final String NAME = "quaBolt";
-    private String qlExpress;
+    private Map<String, String> qcItems = new HashMap<>();
+
     @Override
     public void prepare(Map stormConf, TopologyContext context) {
-        try{
-            qlExpress = ConfigUtil.getExpress("/qc-level.ql");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        qcItems.put("国际漫游", "国际漫游");
+        qcItems.put("来电提醒", "来电提醒");
+        qcItems.put("投诉", "投诉");
+
     }
 
     @Override
     public void execute(Tuple input, BasicOutputCollector collector) {
         try {
-            if (TopoConstant.TOPOLOGY_STREAM_TXT_ID.equals(input.getSourceStreamId())) {
-                ExpressRunner runner = new ExpressRunner();
-                String basicInfo = input.getStringByField(TopoConstant.DEC_BASIC_INFO);
-                String[] info = basicInfo.split(Constant.DELIMITER_FIELDS);
-                Map<String, Integer> maps = Constant.getHBaseMapping();
-                String level = info[maps.get(Constant.custLevel)];
-                String allTxt = info[maps.get(Constant.allContent)];
-                DefaultContext<String, Object> ctx = new DefaultContext<>();
-                ctx.put("level", level);
-                ctx.put("allTxt", allTxt);
-                List<String> errList = new ArrayList<>();
-                Boolean isQc = (Boolean) runner.execute(qlExpress, ctx, errList, true, false);
-                if (isQc) {
-                    String rowKey = input.getStringByField(DEC_ROW_KEY);
-                    collector.emit(TOPOLOGY_STREAM_QC_ID, new Values(rowKey, "level-qc"));
-                }
+            if (TopoConstant.TOPOLOGY_STREAM_HBASE_ID.equals(input.getSourceStreamId())) {
+                String allTxt = input.getStringByField(DEC_ALL_TXT);
+                String rowKey = input.getStringByField(DEC_ROW_KEY);
+                String prov = input.getStringByField(DEC_PROVINCE);
+                // todo 一系列质检的筛选
+               qcItems.forEach((k, v) -> {
+                   if(allTxt.contains(v)){
+                       collector.emit(TOPOLOGY_STREAM_QC_ID, new Values(
+                               rowKey, prov, k
+                       ));
+                   }
+               });
             }
 
         }catch (Exception e) {
@@ -71,7 +60,7 @@ public class QualityBolt implements IBasicBolt{
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declareStream(TOPOLOGY_STREAM_QC_ID, new Fields(DEC_ROW_KEY, DEC_QC_ITEM));
+        declarer.declareStream(TOPOLOGY_STREAM_QC_ID, new Fields(DEC_ROW_KEY, DEC_PROVINCE, DEC_QC_ITEM));
     }
 
     @Override

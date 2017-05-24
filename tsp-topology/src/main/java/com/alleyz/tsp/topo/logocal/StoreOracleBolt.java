@@ -6,6 +6,7 @@ import backtype.storm.topology.IBasicBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Tuple;
 import com.alleyz.tsp.topo.constant.TopoConstant;
+import com.alleyz.tsp.topo.utils.JdbcHelper;
 
 import java.util.Map;
 
@@ -25,8 +26,13 @@ public class StoreOracleBolt implements IBasicBolt {
         if (TopoConstant.TOPOLOGY_STREAM_QC_ID.equals(input.getSourceStreamId())){
             String rowKey = input.getStringByField(TopoConstant.DEC_ROW_KEY);
             String qcItem = input.getStringByField(TopoConstant.DEC_QC_ITEM);
-
-            System.out.println(qcItem + " ===== " + rowKey);
+            String prov = input.getStringByField(TopoConstant.DEC_PROVINCE);
+            try {
+                JdbcHelper.getInstance().insert("insert tbl_voc_qc_row(row_id, row_key, prov, item)" +
+                        "values(seq_qc_row.nextval, ?, ?, ?)", rowKey, prov, qcItem);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
