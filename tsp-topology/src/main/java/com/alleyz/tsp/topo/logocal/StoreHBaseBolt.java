@@ -7,7 +7,7 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
-import com.alleyz.tsp.config.ConfigUtil;
+import com.alleyz.tsp.config.ConfigUtils;
 import com.alleyz.tsp.constant.Constant;
 import com.alleyz.tsp.topo.constant.TopoConstant;
 import org.apache.hadoop.conf.Configuration;
@@ -45,11 +45,11 @@ public class StoreHBaseBolt implements IBasicBolt{
     public void prepare(Map stormConf, TopologyContext context) {
         try {
             Configuration conf = HBaseConfiguration.create();
-            conf.set(Constant.HBASE_ZK_QUORUM, ConfigUtil.getStrVal(Constant.HBASE_ZK_QUORUM));
-            conf.set(Constant.HBASE_ZK_QUORUM_PORT, ConfigUtil.getStrVal(Constant.HBASE_ZK_QUORUM_PORT));
+            conf.set(Constant.HBASE_ZK_QUORUM, ConfigUtils.getStrVal(Constant.HBASE_ZK_QUORUM));
+            conf.set(Constant.HBASE_ZK_QUORUM_PORT, ConfigUtils.getStrVal(Constant.HBASE_ZK_QUORUM_PORT));
             this.connection = ConnectionFactory.createConnection(conf);
         }catch (IOException e) {
-            e.printStackTrace();
+            logger.error("init hbase connection has error", e);
         }
     }
 
@@ -60,18 +60,19 @@ public class StoreHBaseBolt implements IBasicBolt{
             String basicInfo = input.getStringByField(DEC_BASIC_INFO);
             String agentTxt = input.getStringByField(DEC_AGENT_TXT);
             String userTxt = input.getStringByField(DEC_USER_TXT);
+            String prov = input.getStringByField(DEC_PROVINCE);
             String allTxt = input.getStringByField(TopoConstant.DEC_ALL_TXT);
             Put put = transfer2Put(rowKey, basicInfo, allTxt, agentTxt, userTxt);
             // 此table非线程安全 且使用完毕须关闭
             try (Table table = connection.getTable(TableName.valueOf(Constant.CUST_INFO_H_TABLE))){
                 table.put(put);
+                collector.emit(TOPOLOGY_STREAM_HBASE_ID, new Values(
+                        rowKey, prov, basicInfo, agentTxt, userTxt, allTxt
+                ));
             }catch (IOException e) {
                 e.printStackTrace();
-                collector.reportError(e);
+                logger.error("hbase--> execute has error", e);
             }
-            collector.emit(TOPOLOGY_STREAM_HBASE_ID, new Values(
-                    rowKey, basicInfo, agentTxt, userTxt, allTxt
-            ));
         }
     }
 
@@ -97,7 +98,7 @@ public class StoreHBaseBolt implements IBasicBolt{
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
         declarer.declareStream(TopoConstant.TOPOLOGY_STREAM_HBASE_ID, new Fields(
-                DEC_ROW_KEY, DEC_BASIC_INFO, DEC_AGENT_TXT, DEC_USER_TXT, DEC_ALL_TXT
+                DEC_ROW_KEY, DEC_PROVINCE, DEC_BASIC_INFO, DEC_AGENT_TXT, DEC_USER_TXT, DEC_ALL_TXT
         ));
     }
 

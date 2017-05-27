@@ -1,6 +1,6 @@
 package com.alleyz.tsp.topo.utils;
 
-import com.alleyz.tsp.config.ConfigUtil;
+import com.alleyz.tsp.config.ConfigUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,9 +19,9 @@ public class JdbcHelper {
     private JdbcHelper(){
         try {
             this.connection = DriverManager.getConnection(
-                    ConfigUtil.getStrVal("jdbc.url"),
-                    ConfigUtil.getStrVal("jdbc.userName"),
-                    ConfigUtil.getStrVal("jdbc.password"));
+                    ConfigUtils.getStrVal("jdbc.url"),
+                    ConfigUtils.getStrVal("jdbc.userName"),
+                    ConfigUtils.getStrVal("jdbc.password"));
         }catch (SQLException e){
             logger.error("connect db failure!", e);
         }
@@ -31,7 +31,7 @@ public class JdbcHelper {
     }
     static {
         try {
-            Class.forName(ConfigUtil.getStrVal("jdbc.driver"));
+            Class.forName(ConfigUtils.getStrVal("jdbc.driver"));
         }catch (ClassNotFoundException e){
             logger.error("can`t find oracle driver class", e);
         }
@@ -41,7 +41,7 @@ public class JdbcHelper {
     public int insert(String sql, String ... params) throws SQLException{
         try(PreparedStatement ps = connection.prepareStatement(sql)){
             for(int i = 0; i< params.length; i ++){
-                ps.setString(i, params[i]);
+                ps.setString(i+1, params[i]);
             }
             return ps.executeUpdate();
         }

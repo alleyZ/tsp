@@ -5,7 +5,7 @@ import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.IBasicBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Tuple;
-import com.alleyz.tsp.config.ConfigUtil;
+import com.alleyz.tsp.config.ConfigUtils;
 import com.alleyz.tsp.constant.ConstUtils;
 import com.alleyz.tsp.constant.Constant;
 import com.alleyz.tsp.topo.constant.TopoConstant;
@@ -13,6 +13,8 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.common.SolrInputDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Map;
@@ -24,6 +26,7 @@ import static com.alleyz.tsp.constant.Constant.*;
  *
  */
 public class IndexBolt implements IBasicBolt{
+    private static Logger logger = LoggerFactory.getLogger(IndexBolt.class);
     public static final String NAME = "index-bolt";
     private Map<String, Integer> mapping;
     private SolrClient client;
@@ -43,7 +46,7 @@ public class IndexBolt implements IBasicBolt{
 
     private void initSolrClient() {
         CloudSolrClient cloudSolrClient = new CloudSolrClient.Builder()
-                .withZkHost(ConfigUtil.getStrVal("solr.zk"))
+                .withZkHost(ConfigUtils.getStrVal("solr.zk"))
                 .build();
         cloudSolrClient.setZkConnectTimeout(100000);
         this.client = cloudSolrClient;
@@ -56,7 +59,7 @@ public class IndexBolt implements IBasicBolt{
 
     @Override
     public void execute(Tuple input, BasicOutputCollector collector) {
-        if(TopoConstant.TOPOLOGY_STREAM_TXT_ID.equals(input.getSourceStreamId())) {
+        if(TopoConstant.TOPOLOGY_STREAM_HBASE_ID.equals(input.getSourceStreamId())) {
             try {
                 String rowKey = input.getStringByField(TopoConstant.DEC_ROW_KEY);
                 String basicInfo = input.getStringByField(TopoConstant.DEC_BASIC_INFO);
@@ -68,19 +71,19 @@ public class IndexBolt implements IBasicBolt{
                 SolrInputDocument doc = transferDoc(rowKey, bis, userTxt, agentTxt, allTxt);
                 commit(prov, doc);
             }catch (SolrServerException e) {
-                collector.reportError(e);
                 e.printStackTrace();
+                logger.error("solr has error", e);
             }catch (IOException e) {
+                logger.error("solr has error", e);
                 e.printStackTrace();
-                collector.reportError(e);
                 initSolrClient();
             }
         }
     }
 
     private void commit(String prov, SolrInputDocument doc) throws SolrServerException, IOException{
-        this.client.add(ConfigUtil.getStrVal("solr.prefix") + prov, doc,
-                ConfigUtil.getIntVal("solr.waitCommitMills", 5000));
+        this.client.add(ConfigUtils.getStrVal("solr.prefix") + prov, doc,
+                ConfigUtils.getIntVal("solr.waitCommitMills", 5000));
     }
 
     private SolrInputDocument transferDoc(String rowKey, String[] bis, String userTxt, String agentTxt, String allTxt) {

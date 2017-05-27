@@ -8,6 +8,12 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>tsp-topology</artifactId>
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+    <directory>${project.basedir}/target</directory>
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
@@ -29,5 +35,31 @@
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+    <dependency>
+      <groupId>com.alibaba.jstorm</groupId>
+      <artifactId>jstorm-core</artifactId>
+      <version>2.2.1</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>clojure</artifactId>
+          <groupId>org.clojure</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>logback-classic</artifactId>
+          <groupId>ch.qos.logback</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>log4j-over-slf4j</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>rocksdbjni</artifactId>
+          <groupId>org.rocksdb</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
 </project>
 

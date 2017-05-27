@@ -5,9 +5,8 @@ import backtype.storm.StormSubmitter;
 import backtype.storm.generated.AlreadyAliveException;
 import backtype.storm.generated.InvalidTopologyException;
 import backtype.storm.topology.TopologyBuilder;
-import com.alleyz.tsp.config.ConfigUtil;
+import com.alleyz.tsp.config.ConfigUtils;
 import com.alleyz.tsp.topo.TxtTopology;
-import com.alleyz.tsp.topo.constant.TopoConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,10 +58,10 @@ public class Application {
 
     public static void main(String[] args) {
         try {
-            if ("local".equals(ConfigUtil.getStrVal(TopoConstant.TOPOLOGY_MODE))) {
-                runLocalMode(ConfigUtil.prop2Map("/topology-local.properties"));
+            if (args !=null && args.length >0 &&"local".equals(args[0])) {
+                runLocalMode(ConfigUtils.prop2Map("/topology-local.properties"));
             } else {
-                runRemoteMode(ConfigUtil.prop2Map("/topology-remote.properties"));
+                runRemoteMode(ConfigUtils.prop2Map("/topology-remote.properties"));
             }
         }catch (InterruptedException e) {
             logger.error("InterruptedException ", e);

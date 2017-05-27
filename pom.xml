@@ -15,6 +15,7 @@
         <module>tsp-producer</module>
         <module>tsp-pretreat</module>
         <module>tsp-express</module>
+        <module>tsp-store</module>
     </modules>
 
     <properties>

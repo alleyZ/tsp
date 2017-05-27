@@ -6,7 +6,7 @@ import backtype.storm.topology.IRichSpout;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
-import com.alleyz.tsp.config.ConfigUtil;
+import com.alleyz.tsp.config.ConfigUtils;
 import com.alleyz.tsp.kafka.consumer.SimpleConsumer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -32,8 +32,8 @@ public class TxtSpout implements IRichSpout{
     @Override
     public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
         this.collector = collector;
-        Properties props = ConfigUtil.getProp("/consumer.properties");
-        Long interval = ConfigUtil.getLongVal("poll.interval.mills", 1000L);
+        Properties props = ConfigUtils.getProp("/consumer.properties");
+        Long interval = ConfigUtils.getLongVal("poll.interval.mills", 1000L);
         this.consumer = new SimpleConsumer(TXT_MSG_TOPIC, TXT_MSG_GROUP_TOPOLOGY, props, interval);
 
     }
@@ -58,20 +58,26 @@ public class TxtSpout implements IRichSpout{
                 String[] values = value.split(DELIMITER_BLOCK);
                 String basicInfo = values[0];
                 String[] txt = values[1].split(DELIMITER_FIELDS);
-                logger.debug("tuple rowKey is " + rowKey);
-                this.collector.emit(
-                        TOPOLOGY_STREAM_TXT_ID,
-                        new Values(
-                                rowKey,
-                                rowKey.substring(10, 12),
-                                StringUtils.reverse(rowKey.substring(0, 10))
-                                .substring(0, 8),
-                                basicInfo,
-                                txt[0],
-                                txt[1],
-                                txt[2]
-                ));
+                logger.info("++++++++++ tuple rowKey is " + rowKey);
+                try {
+                    this.collector.emit(
+                            TOPOLOGY_STREAM_TXT_ID,
+                            new Values(
+                                    rowKey,
+                                    rowKey.substring(10, 12),
+                                    StringUtils.reverse(rowKey.substring(0, 10))
+                                            .substring(0, 8),
+                                    basicInfo,
+                                    txt[0],
+                                    txt[1],
+                                    txt[2]
+                            ));
+
+                }catch (Exception e){
+                    logger.error("txt-spout has err", e);
+                }
             }
+            return true;
         });
 
     }

@@ -7,8 +7,8 @@ import redis.clients.jedis.JedisPoolConfig;
 import java.util.Map;
 import java.util.Set;
 
-import static com.alleyz.tsp.config.ConfigUtil.getIntVal;
-import static com.alleyz.tsp.config.ConfigUtil.getStrVal;
+import static com.alleyz.tsp.config.ConfigUtils.getIntVal;
+import static com.alleyz.tsp.config.ConfigUtils.getStrVal;
 
 /**
  * Created by alleyz on 2017/5/23.

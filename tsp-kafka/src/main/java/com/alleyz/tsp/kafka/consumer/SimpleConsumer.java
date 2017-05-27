@@ -39,8 +39,8 @@ public class SimpleConsumer implements Closeable{
             logger.debug("AutoConsumer - startAccept: 接受消息");
             ConsumerRecords<String, String> crs = this.consumer.poll(pollInterval);
             if(crs.isEmpty()) return;
-            handler.process(crs);
-            this.consumer.commitSync();
+            if(handler.process(crs))
+                this.consumer.commitSync();
 //        }
     }
 
@@ -53,6 +53,6 @@ public class SimpleConsumer implements Closeable{
      * 消息处理类
      */
     public interface MsgHandler {
-        void process(ConsumerRecords<String, String> crs);
+        boolean process(ConsumerRecords<String, String> crs);
     }
 }

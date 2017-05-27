@@ -1,6 +1,6 @@
 package com.alleyz.tsp.producer;
 
-import com.alleyz.tsp.config.ConfigUtil;
+import com.alleyz.tsp.config.ConfigUtils;
 import com.alleyz.tsp.kafka.producer.SimpleProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +51,7 @@ public class MultiProducer {
                 try { Thread.sleep(2000L); }catch (Exception e) {e.printStackTrace();}
             }
         }, "Producer-Reader");
-        Properties prop = ConfigUtil.getProp("/producer.properties");
+        Properties prop = ConfigUtils.getProp("/producer.properties");
         workers = new Thread[workerNum];
         for(int i = 0; i < workerNum; i++) {
             workers[i] = new Thread(()->{

@@ -7,6 +7,8 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Tuple;
 import com.alleyz.tsp.constant.Constant;
 import com.alleyz.tsp.topo.utils.RedisHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -19,6 +21,7 @@ import static com.alleyz.tsp.topo.constant.TopoConstant.*;
  */
 public class StoreNewWordBolt implements IBasicBolt{
     public final static String NAME = "store-new-word-bolt";
+    private static Logger logger = LoggerFactory.getLogger(StoreNewWordBolt.class);
     @Override
     public void prepare(Map stormConf, TopologyContext context) {
 
@@ -31,8 +34,12 @@ public class StoreNewWordBolt implements IBasicBolt{
                     nature = input.getStringByField(DEC_NW_WORD_NATURE),
                     weight = input.getStringByField(DEC_NW_WORD_WEIGHT),
                     freq = input.getStringByField(DEC_NW_WORD_FREQ);
-            RedisHelper.getInstance().add2Hash(Constant.REDIS_KEY_NEW_WORD, word, nature + DELIMITER_FIELDS
-                    + weight + DELIMITER_FIELDS + freq);
+            try {
+                RedisHelper.getInstance().add2Hash(Constant.REDIS_KEY_NEW_WORD, word, nature + DELIMITER_FIELDS
+                        + weight + DELIMITER_FIELDS + freq);
+            }catch (Exception e) {
+                logger.error("new word redis has err", e);
+            }
         }
     }
 

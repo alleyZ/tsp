@@ -7,12 +7,16 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
-import com.alleyz.tsp.config.ConfigUtil;
-import com.alleyz.tsp.topo.utils.TopologyHelper;
+import com.alleyz.tsp.config.ConfigUtils;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;
 
@@ -21,7 +25,9 @@ import static com.alleyz.tsp.topo.constant.TopoConstant.*;
 
 /**
  * Created by alleyz on 2017/5/22.
+ *  由消费者直接从kafak读消息上hdfs
  */
+@Deprecated
 public class StoreOriginBolt implements IBasicBolt {
     private static Logger logger = LoggerFactory.getLogger(StoreOriginBolt.class);
     public static final String NAME = "store_hdfs_origin_bolt";
@@ -30,8 +36,8 @@ public class StoreOriginBolt implements IBasicBolt {
     @Override
     public void prepare(Map stormConf, TopologyContext context) {
         this.hadoopConf = new Configuration();
-        this.oriPath = ConfigUtil.getStrVal(PATH_HDFS_ORI);
-        System.setProperty(HADOOP_USER_NAME, ConfigUtil.getStrVal(HADOOP_USER));
+        this.oriPath = ConfigUtils.getStrVal(PATH_HDFS_ORI);
+        System.setProperty(HADOOP_USER_NAME, ConfigUtils.getStrVal(HADOOP_USER));
     }
 
     @Override
@@ -48,15 +54,30 @@ public class StoreOriginBolt implements IBasicBolt {
             String realPath = this.oriPath.replace("{prov}", prov).replace("{month}", month);
             String content = rowKey + DELIMITER_BLOCK + basicInfo + DELIMITER_BLOCK + allTxt + "\r\n";
             try {
-                TopologyHelper.appendHDFS(realPath, content, this.hadoopConf);
+                append(realPath, content);
                 collector.emit(TOPOLOGY_STREAM_STORE_ORI_ID, new Values(
                    rowKey, prov, day, basicInfo, userTxt, agentTxt, allTxt
                 ));
             }catch (IOException e) {
-                logger.error("store origin to hdfs has error", e);
+                logger.error("store origin to hdfs has error " + rowKey, e);
             }
         }
     }
+
+    private synchronized void append(String realPath, String content) throws IOException{
+        Path path = new Path(realPath);
+        try(FileSystem fs = FileSystem.get(this.hadoopConf)){
+            FSDataOutputStream fos;
+            if(fs.exists(path)){
+                fos = fs.append(path);
+            } else{
+                fos = fs.create(path);
+            }
+            ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
+            IOUtils.copyBytes(is, fos, 4096, false);
+        }
+    }
+
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {

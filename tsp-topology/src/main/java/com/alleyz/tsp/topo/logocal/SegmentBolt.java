@@ -39,17 +39,21 @@ public class SegmentBolt implements IBasicBolt{
     public void execute(Tuple input, BasicOutputCollector collector) {
 
         if(TopoConstant.TOPOLOGY_STREAM_TXT_ID.equals(input.getSourceStreamId())) {
-            String rowKey = input.getStringByField(TopoConstant.DEC_ROW_KEY);
-            String allTxt = input.getStringByField(TopoConstant.DEC_ALL_TXT);
-            String prov = input.getStringByField(TopoConstant.DEC_PROVINCE);
-            String day = input.getStringByField(TopoConstant.DEC_DAY);
-            if(allTxt == null || allTxt.length() == 0) return;
-            String words = NLPIRUtil.segment(allTxt, false);
-            //todo 去除噪声词
-            if(words != null && words.length() > 0) {
-                collector.emit(TopoConstant.TOPOLOGY_STREAM_SEG_WORD_ID, new Values(
-                   rowKey, prov, day, words
-                ));
+            try {
+                String rowKey = input.getStringByField(TopoConstant.DEC_ROW_KEY);
+                String allTxt = input.getStringByField(TopoConstant.DEC_ALL_TXT);
+                String prov = input.getStringByField(TopoConstant.DEC_PROVINCE);
+                String day = input.getStringByField(TopoConstant.DEC_DAY);
+                if (allTxt == null || allTxt.length() == 0) return;
+                String words = NLPIRUtil.segment(allTxt, false);
+                //todo 去除噪声词
+                if (words != null && words.length() > 0) {
+                    collector.emit(TopoConstant.TOPOLOGY_STREAM_SEG_WORD_ID, new Values(
+                            rowKey, prov, day, words
+                    ));
+                }
+            }catch (Exception e) {
+                logger.error("seg has err", e);
             }
         }
     }

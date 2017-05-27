@@ -7,6 +7,8 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Tuple;
 import com.alleyz.tsp.topo.constant.TopoConstant;
 import com.alleyz.tsp.topo.utils.JdbcHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -15,6 +17,7 @@ import java.util.Map;
  *
  */
 public class StoreOracleBolt implements IBasicBolt {
+    private static Logger logger = LoggerFactory.getLogger(StoreOracleBolt.class);
     public static final String NAME = "oraBolt";
     @Override
     public void prepare(Map stormConf, TopologyContext context) {
@@ -28,10 +31,10 @@ public class StoreOracleBolt implements IBasicBolt {
             String qcItem = input.getStringByField(TopoConstant.DEC_QC_ITEM);
             String prov = input.getStringByField(TopoConstant.DEC_PROVINCE);
             try {
-                JdbcHelper.getInstance().insert("insert tbl_voc_qc_row(row_id, row_key, prov, item)" +
+                JdbcHelper.getInstance().insert("insert into tbl_voc_qc_row(row_id, row_key, prov, item)" +
                         "values(seq_qc_row.nextval, ?, ?, ?)", rowKey, prov, qcItem);
             }catch (Exception e){
-                e.printStackTrace();
+                logger.error("ora", e);
             }
         }
     }

@@ -1,10 +1,15 @@
 package com.alleyz.tsp.nplir;
 
 
+import com.alleyz.tsp.utils.FileUtils;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Structure;
+import net.lingala.zip4j.core.ZipFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -17,6 +22,7 @@ import static java.io.File.separator;
  *
  */
 public class NLPIRUtil {
+    private static Logger logger = LoggerFactory.getLogger(NLPIRUtil.class);
     private static CLibrary instance;
     private static final String OS_ARCH = "os.arch"; // 操作系统架构
     private static final String OS_NAME = "os.name"; // 操作系统名称
@@ -31,8 +37,58 @@ public class NLPIRUtil {
     private static volatile boolean isInit = false;
 
     static {
-        buildInstance();
-        init(UTF8_CODE);
+        synchronized (NLPIRUtil.class) {
+//        if("true".equals(ConfigUtils.getStrVal("nlpir.dec"))){
+            String jarPath = NLPIRUtil.class.getResource("/nlpir.zip").getPath();
+            logger.info("-----------------" + jarPath);
+            System.out.println("---------" + jarPath);
+            if(jarPath.contains(".jar")) {
+                jarPath = jarPath.substring(jarPath.indexOf(":") + 1, jarPath.indexOf("!"));
+                jarPath = jarPath.substring(0, jarPath.lastIndexOf("/") + 1);
+                String nlpZip = jarPath + "nlpir.zip";
+                try {
+                    InputStream is = NLPIRUtil.class.getResourceAsStream("/nlpir.zip");
+                    System.out.println("---------" + nlpZip);
+                    FileUtils.copyFile(is , nlpZip); // 将jar中的文件拷贝到本地文件系统中
+                    ZipFile zipFile = new ZipFile(nlpZip);
+                    if(zipFile.isValidZipFile()) {
+                        zipFile.extractAll(jarPath);  // 解压
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                buildInstance(jarPath + "nlpir/lib/linux64/libNLPIR.so");
+                init(jarPath + "nlpir/Data", UTF8_CODE);
+            }else {
+                buildInstance(getLibPath());
+                init(NLPIR_DATA_PATH, UTF8_CODE);
+            }
+        }
+    }
+
+    private static String getLibPath(){
+        Properties prop = System.getProperties();
+        NLPIR_DATA_PATH = NLPIRUtil.class.getResource("/nlpir").getPath();
+        logger.info("NLPIR_DATA_PATH -------- + " + NLPIR_DATA_PATH);
+        String libPath = NLPIR_DATA_PATH + separator + "lib" + separator, libName;
+        logger.info("NLPIR_DATA_PATH --- lib----- + " + libPath);
+        String osName = prop.getProperty(OS_NAME);
+        if(osName.toLowerCase().contains(OS_WIN_PREFIX)) {
+            NLPIR_DATA_PATH = NLPIR_DATA_PATH.substring(1);
+            libPath = libPath.substring(1);
+            libPath += OS_WIN_PREFIX;
+            libName = NLPIR_LIB_WIN;
+        } else {
+            libPath += OS_LINUX;
+            libName = NLPIR_LIB_LINUX;
+        }
+        String osArch = prop.getProperty(OS_ARCH);
+        if(osArch.contains(OS_ARCH_64)) {
+            libPath += OS_ARCH_64;
+        }else{
+            libPath += OS_ARCH_32;
+        }
+        return libPath + separator + libName;
     }
 
     /**
@@ -63,10 +119,12 @@ public class NLPIRUtil {
      * 初始化分词器
      * @param enCode 编码
      */
-    public synchronized static boolean init(EnCode enCode) {
+    public synchronized static boolean init(String dataPath, EnCode enCode) {
+        logger.info("NLPIR- libPath ---:  init ..." );
         if(!isInit()) {
             isInit = true;
-            return instance.NLPIR_Init(NLPIR_DATA_PATH, enCode.val, 0) == 1;
+            logger.info("NLPIR- libPath ---:  init !!!!!" );
+            return instance.NLPIR_Init(dataPath, enCode.val, 0) == 1;
         }
         return isInit;
     }
@@ -81,7 +139,6 @@ public class NLPIRUtil {
      * @return 空格隔开， 如果有标注则在词之后加词性
      */
     public static String segment(String line, boolean isTag) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_ParagraphProcess(line, isTag ? 1 : 0);
     }
 
@@ -91,7 +148,6 @@ public class NLPIRUtil {
      * @return 空格隔开的词语
      */
     public static String segmentMin(String line) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_FinerSegment(line);
     }
 
@@ -103,7 +159,6 @@ public class NLPIRUtil {
      * @return 是否成功
      */
     public static boolean segment(String sourceFile, String destFile, boolean isTag) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_FileProcess(sourceFile, destFile, isTag ? 1 : 0) > 0;
     }
 
@@ -114,7 +169,6 @@ public class NLPIRUtil {
      * @return 是否成功
      */
     public static boolean importUserDic(String dicFile, boolean isOverwrite) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_ImportUserDict(dicFile, isOverwrite) == 1;
     }
 
@@ -125,7 +179,6 @@ public class NLPIRUtil {
      */
     @SuppressWarnings("测试不生效")
     public static boolean importKeyBlackList(String fileName) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_ImportKeyBlackList(fileName) == 1;
     }
 
@@ -135,7 +188,6 @@ public class NLPIRUtil {
      * @return 是否成功
      */
     public static boolean addUserWord(String word) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_AddUserWord(word) == 1;
     }
 
@@ -145,7 +197,6 @@ public class NLPIRUtil {
      */
     @SuppressWarnings("测试后保存的文件没找到")
     public static boolean saveUserDic() {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_SaveTheUsrDic() == 1;
     }
 
@@ -158,7 +209,6 @@ public class NLPIRUtil {
      * @return 是否成功
      */
     public static boolean delUserWord(String word) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_DelUsrWord(word) > -1;
     }
 
@@ -169,7 +219,6 @@ public class NLPIRUtil {
      */
     @SuppressWarnings("1、官方未有说明文档；2、返回科学计数法")
     public static double getWordProb(String canWord) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_GetUniProb(canWord);
     }
 
@@ -179,7 +228,6 @@ public class NLPIRUtil {
      * @return 是否
      */
     public static boolean coreDicHasTheWord(String canWord) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_IsWord(canWord) > 0;
     }
 
@@ -190,7 +238,6 @@ public class NLPIRUtil {
      */
     @SuppressWarnings("只针对内置词典有效")
     public static String getWordNature(String word) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_GetWordPOS(word);
     }
 
@@ -202,7 +249,6 @@ public class NLPIRUtil {
      * @return 词/词性/权重/词频#词/词性/权重/词频#  or 词#词#词
      */
     public static String getKeyWords(String line, int maxKeywordLimit, boolean weightOut) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_GetKeyWords(line, maxKeywordLimit, weightOut);
     }
 
@@ -214,7 +260,6 @@ public class NLPIRUtil {
      * @return 词/词性/权重/词频#词/词性/权重/词频#  or 词#词#词
      */
     public static String getFileKeyWords(String file, int maxKeywordLimit, boolean weightOut) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_GetFileKeyWords(file, maxKeywordLimit, weightOut);
     }
 
@@ -226,7 +271,6 @@ public class NLPIRUtil {
      * @return 词/词性/权重/词频#词/词性/权重/词频#  or 词#词#词
      */
     public static String getNewWords(String line, int maxLimit, boolean weightOut) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_GetNewWords(line, maxLimit, weightOut);
     }
 
@@ -238,7 +282,6 @@ public class NLPIRUtil {
      * @return 词/词性/权重/词频#词/词性/权重/词频#  or 词#词#词
      */
     public static String getFileNewWords(String file, int maxLimit, boolean weightOut) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_GetFileNewWords(file, maxLimit, weightOut);
     }
 
@@ -248,7 +291,6 @@ public class NLPIRUtil {
      * @return 指纹
      */
     public static long fingerprint(String line) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_FingerPrint(line);
     }
 
@@ -257,7 +299,6 @@ public class NLPIRUtil {
      * @return 具体内容
      */
     public static String getLastErrorMsg() {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_GetLastErrorMsg();
     }
 
@@ -267,7 +308,6 @@ public class NLPIRUtil {
      * @return 是否成功
      */
     public static boolean setPOSTag(PosMap pm) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_SetPOSmap(pm.val) == 1;
     }
 
@@ -277,7 +317,6 @@ public class NLPIRUtil {
      * @return 词语总数
      */
     public static int getWordCount(String line) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_GetParagraphProcessAWordCount(line);
     }
 
@@ -287,7 +326,6 @@ public class NLPIRUtil {
      * @return 词语
      */
     public static String getEngWordOrigin(String engWord) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_GetEngWordOrign(engWord);
     }
 
@@ -297,7 +335,6 @@ public class NLPIRUtil {
      * @return 结果 词/词性/词频#词/词性/词频#词/词性/词频...
      */
     public static String getWordFreqCount(String line) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_WordFreqStat(line);
     }
 
@@ -307,7 +344,6 @@ public class NLPIRUtil {
      * @return 结果 词/词性/词频#词/词性/词频#词/词性/词频...
      */
     public static String getFileWordFreqCount(String file) {
-        if(isInit()) init(UTF8_CODE);
         return instance.NLPIR_FileWordFreqStat(file);
     }
 
@@ -323,7 +359,7 @@ public class NLPIRUtil {
 
     /**
      * 退出分词器 (谨慎使用)
-     *  执行此方法后，仍需要分词，请先执行{@link NLPIRUtil#init(EnCode)}方法才可
+     *  执行此方法后，仍需要分词，请先执行{@link NLPIRUtil#init(String, EnCode)}方法才可
      * @return 是否
      */
     public synchronized static boolean exit() {
@@ -337,27 +373,12 @@ public class NLPIRUtil {
     /**
      * 加载分词器 库文件
      */
-    private static void buildInstance() {
-        Properties prop = System.getProperties();
-        NLPIR_DATA_PATH = NLPIRUtil.class.getResource("/nlpir").getPath();
-        String libPath = NLPIR_DATA_PATH + separator + "lib" + separator, libName;
-        String osName = prop.getProperty(OS_NAME);
-        if(osName.toLowerCase().contains(OS_WIN_PREFIX)) {
-            NLPIR_DATA_PATH = NLPIR_DATA_PATH.substring(1);
-            libPath = libPath.substring(1);
-            libPath += OS_WIN_PREFIX;
-            libName = NLPIR_LIB_WIN;
-        } else {
-            libPath += OS_LINUX;
-            libName = NLPIR_LIB_LINUX;
-        }
-        String osArch = prop.getProperty(OS_ARCH);
-        if(osArch.contains(OS_ARCH_64)) {
-            libPath += OS_ARCH_64;
-        }else{
-            libPath += OS_ARCH_32;
-        }
-        instance = (CLibrary) Native.loadLibrary(libPath + separator + libName, CLibrary.class);
+    private static void buildInstance(String libPath) {
+        logger.info("NLPIR- libPath ---:  " + libPath);
+
+//        Native.loadLibrary()
+        instance = (CLibrary) Native.loadLibrary(libPath, CLibrary.class);
+        logger.info("NLPIR- libPath ---:  init success" );
     }
     private interface CLibrary extends Library{
 

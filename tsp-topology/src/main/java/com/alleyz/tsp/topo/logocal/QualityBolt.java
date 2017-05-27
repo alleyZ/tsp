@@ -8,6 +8,8 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 import com.alleyz.tsp.topo.constant.TopoConstant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +21,7 @@ import static com.alleyz.tsp.topo.constant.TopoConstant.*;
  *
  */
 public class QualityBolt implements IBasicBolt{
+    private static Logger logger = LoggerFactory.getLogger(QualityBolt.class);
     public static final String NAME = "quaBolt";
     private Map<String, String> qcItems = new HashMap<>();
 
@@ -27,6 +30,7 @@ public class QualityBolt implements IBasicBolt{
         qcItems.put("国际漫游", "国际漫游");
         qcItems.put("来电提醒", "来电提醒");
         qcItems.put("投诉", "投诉");
+        qcItems.put("信号问题", "信号不好");
 
     }
 
@@ -48,7 +52,7 @@ public class QualityBolt implements IBasicBolt{
             }
 
         }catch (Exception e) {
-            collector.reportError(e);
+            logger.error("quality has error", e);
         }
 
     }

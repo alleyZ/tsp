@@ -5,7 +5,7 @@ import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.IBasicBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Tuple;
-import com.alleyz.tsp.config.ConfigUtil;
+import com.alleyz.tsp.config.ConfigUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -39,11 +39,11 @@ public class StoredHDFSBolt implements IBasicBolt{
     @Override
     public void prepare(Map stormConf, TopologyContext context) {
         this.hadoopConf = new Configuration();
-        this.oriPath = ConfigUtil.getStrVal(PATH_HDFS_ORI);
-        this.segPath = ConfigUtil.getStrVal(PATH_HDFS_SEG);
-        this.nwPath = ConfigUtil.getStrVal(PATH_HDFS_NEW_WORD);
+        this.oriPath = ConfigUtils.getStrVal(PATH_HDFS_ORI);
+        this.segPath = ConfigUtils.getStrVal(PATH_HDFS_SEG);
+        this.nwPath = ConfigUtils.getStrVal(PATH_HDFS_NEW_WORD);
 //        this.hadoopConf.set("fs.defaultFS", "hdfs://hd-29:8020");
-        System.setProperty(HADOOP_USER_NAME, ConfigUtil.getStrVal(HADOOP_USER));
+        System.setProperty(HADOOP_USER_NAME, ConfigUtils.getStrVal(HADOOP_USER));
     }
 
     @Override

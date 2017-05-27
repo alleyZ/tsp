@@ -31,17 +31,23 @@ public class NewWordBolt implements IBasicBolt {
     @Override
     public void execute(Tuple input, BasicOutputCollector collector) {
         if(TopoConstant.TOPOLOGY_STREAM_TXT_ID.equals(input.getSourceStreamId())) {
-            String allTxt = input.getStringByField(TopoConstant.DEC_ALL_TXT);
-            String newWords = NLPIRUtil.getNewWords(allTxt, 50, true);
-            if(newWords !=null && newWords.length() > 0) {
-                String[] words = newWords.split("#");
-                for(String word : words) {
-                    String[] wordMeta = word.split("/");
-                    if(wordMeta.length != 4) continue;
-                    collector.emit(TOPOLOGY_STREAM_NEW_WORD_ID, new Values(
-                        wordMeta[0], wordMeta[1], wordMeta[2], wordMeta[3]
-                    ));
+            try {
+                String allTxt = input.getStringByField(TopoConstant.DEC_ALL_TXT);
+                logger.info("new word ++++++++++++ ");
+                String newWords = NLPIRUtil.getNewWords(allTxt, 50, true);
+                logger.info("new word ++++++++++++ " + newWords);
+                if (newWords != null && newWords.length() > 0) {
+                    String[] words = newWords.split("#");
+                    for (String word : words) {
+                        String[] wordMeta = word.split("/");
+                        if (wordMeta.length != 4) continue;
+                        collector.emit(TOPOLOGY_STREAM_NEW_WORD_ID, new Values(
+                                wordMeta[0], wordMeta[1], wordMeta[2], wordMeta[3]
+                        ));
+                    }
                 }
+            }catch (Exception e){
+                logger.error("new word has err", e);
             }
         }
     }
