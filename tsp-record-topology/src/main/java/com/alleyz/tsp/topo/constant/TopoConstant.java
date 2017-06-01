@@ -15,6 +15,7 @@ public class TopoConstant {
     public final static String TOPOLOGY_STREAM_QC_ID = "qc-stream";
     public final static String TOPOLOGY_STREAM_STORE_ORI_ID = "store-ori-stream";
 
+    public final static String DEC_BATCH_ID = "batchId";
     public final static String DEC_ROW_KEY = "rowKey";
     public final static String DEC_BASIC_INFO = "basicInfo";
     public final static String DEC_PROVINCE = "province";
