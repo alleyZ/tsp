@@ -13,6 +13,9 @@ public class Constant {
     public final static String SEG_MSG_TOPIC = "topic-segment";
 
     public final static String TXT_MSG_GROUP_TOPOLOGY = "jstorm-topology";
+    public final static String MSG_GROUP = "kafka.msg.group";
+
+    public final static String REDIS_NW_KEY = "NewWordByStream";
 
     //消息区块分割符
     public final static String DELIMITER_BLOCK = "&";

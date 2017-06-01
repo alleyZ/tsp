@@ -10,12 +10,14 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>tsp-kafka</module>
-        <module>tsp-topology</module>
+        <module>tsp-record-topology</module>
         <module>tsp-utils</module>
         <module>tsp-producer</module>
         <module>tsp-pretreat</module>
         <module>tsp-express</module>
         <module>tsp-store</module>
+        <module>tsp-nw-topology</module>
+        <module>tsp-helper</module>
     </modules>
 
     <properties>
