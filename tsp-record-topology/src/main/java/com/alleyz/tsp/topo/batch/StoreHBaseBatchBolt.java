@@ -8,6 +8,7 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
+import backtype.storm.utils.TupleHelpers;
 import com.alibaba.jstorm.batch.BatchId;
 import com.alibaba.jstorm.batch.ICommitter;
 
@@ -32,6 +33,7 @@ public class StoreHBaseBatchBolt implements IBasicBolt, ICommitter {
     @Override
     public void execute(Tuple input, BasicOutputCollector collector) {
 //        if("streamId".equals(input.getSourceStreamId())) {
+        if(TupleHelpers.isTickTuple(input)) return;
             BatchId batchId = (BatchId) input.getValue(0);
             Long val = (Long) input.getValue(1);
             Queue<Long> queue = dataMaps.get(batchId.getId());

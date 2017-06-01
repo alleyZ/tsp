@@ -7,6 +7,7 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
+import backtype.storm.utils.TupleHelpers;
 import com.alibaba.jstorm.batch.BatchId;
 import com.alibaba.jstorm.batch.IBatchSpout;
 
@@ -23,6 +24,10 @@ public class TxtBatchSpout implements IBatchSpout {
 
     @Override
     public void execute(Tuple input, BasicOutputCollector collector) {
+        if(TupleHelpers.isTickTuple(input)) return;
+
+        System.out.println(input.getSourceStreamId());
+//        if()
         BatchId batchId = (BatchId) input.getValue(0);
         System.out.println();
         System.out.println("-----sssss-------~ execute ~~" + batchId);

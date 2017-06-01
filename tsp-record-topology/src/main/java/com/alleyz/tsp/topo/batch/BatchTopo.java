@@ -19,6 +19,8 @@ public class BatchTopo {
 //        builder.setBolt("Bolt", new StoreHBaseBatchBolt(), 1).shuffleGrouping("Spout", "streamId");
         BoltDeclarer boltDeclarer = builder.setSpout("Spout", new TxtBatchSpout(), 1);
         builder.setBolt("Bolt", new StoreHBaseBatchBolt(), 1).shuffleGrouping("Spout");
+//        builder.setSpout("Spout", new TxtBatchSpout(), 1);
+//        builder.setBolt("Bolt", new StoreHBaseBatchBolt(), 1).shuffleGrouping("Spout");
         return builder.getTopologyBuilder();
     }
 
