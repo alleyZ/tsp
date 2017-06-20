@@ -1,0 +1,149 @@
+2017-06-20 07:03:07,253 INFO [main] com.tencent.angel.master.AngelApplicationMaster: app name=test
+2017-06-20 07:03:07,269 INFO [main] com.tencent.angel.master.AngelApplicationMaster: app attempt id=appattempt_1497953474156_0003_000001
+2017-06-20 07:03:07,815 INFO [main] com.tencent.angel.master.AngelApplicationMaster: app state output path = hdfs://hd-23:6000/tmp/hadoop/application_1497953474156_0003_0f523593-bbe8-46ee-8527-1cdc11eab5b4/app
+2017-06-20 07:03:09,221 INFO [main] com.tencent.angel.master.oplog.AppStateStorage: writeDir=hdfs://hd-23:6000/tmp/hadoop/application_1497953474156_0003_0f523593-bbe8-46ee-8527-1cdc11eab5b4/app
+2017-06-20 07:03:09,222 INFO [main] com.tencent.angel.master.AngelApplicationMaster: build app state storage success
+2017-06-20 07:03:09,224 INFO [main] com.tencent.angel.master.AngelApplicationMaster: build event dispacher
+2017-06-20 07:03:09,226 INFO [main] com.tencent.angel.master.AngelApplicationMaster: deploy mode=YARN
+2017-06-20 07:03:09,271 INFO [main] org.apache.hadoop.yarn.event.AsyncDispatcher: Registering class com.tencent.angel.master.deploy.ContainerAllocatorEventType for class com.tencent.angel.master.deploy.yarn.YarnContainerAllocator
+2017-06-20 07:03:09,271 INFO [main] com.tencent.angel.master.AngelApplicationMaster: build containerAllocator success
+2017-06-20 07:03:09,272 INFO [main] org.apache.hadoop.yarn.event.AsyncDispatcher: Registering class com.tencent.angel.master.deploy.ContainerLauncherEventType for class com.tencent.angel.master.deploy.yarn.YarnContainerLauncher
+2017-06-20 07:03:09,272 INFO [main] com.tencent.angel.master.AngelApplicationMaster: build containerLauncher success
+2017-06-20 07:03:09,280 INFO [main] com.tencent.angel.master.AngelApplicationMaster: build master service success
+2017-06-20 07:03:09,301 INFO [main] com.tencent.angel.master.AngelApplicationMaster: recoverPSAttemptIndex return is null
+2017-06-20 07:03:09,314 INFO [main] org.apache.hadoop.yarn.event.AsyncDispatcher: Registering class com.tencent.angel.master.ps.ParameterServerManagerEventType for class com.tencent.angel.master.ps.ParameterServerManager
+2017-06-20 07:03:09,315 INFO [main] org.apache.hadoop.yarn.event.AsyncDispatcher: Registering class com.tencent.angel.master.ps.ps.AMParameterServerEventType for class com.tencent.angel.master.AngelApplicationMaster$ParameterServerEventHandler
+2017-06-20 07:03:09,316 INFO [main] org.apache.hadoop.yarn.event.AsyncDispatcher: Registering class com.tencent.angel.master.ps.attempt.PSAttemptEventType for class com.tencent.angel.master.AngelApplicationMaster$PSAttemptEventDispatcher
+2017-06-20 07:03:09,316 INFO [main] com.tencent.angel.master.AngelApplicationMaster: build PSManager success
+2017-06-20 07:03:09,331 INFO [main] com.tencent.angel.master.AngelApplicationMaster: running mode=ANGEL_PS_WORKER
+2017-06-20 07:03:09,336 INFO [main] com.tencent.angel.master.data.DataSpliter: expected split number=1
+2017-06-20 07:03:09,336 INFO [main] com.tencent.angel.master.data.DataSpliter: use new mapreduce api
+2017-06-20 07:03:09,344 INFO [main] com.tencent.angel.utils.HdfsUtil: before getInputFileTotalSize
+2017-06-20 07:03:09,344 INFO [main] com.tencent.angel.utils.HdfsUtil: dirs=hdfs://hd-23:6000/angel/data
+2017-06-20 07:03:09,346 INFO [main] com.tencent.angel.utils.HdfsUtil: dirs[0]=hdfs://hd-23:6000/angel/data
+2017-06-20 07:03:09,650 INFO [main] com.tencent.angel.master.data.DataSpliter: totalInputFileSize=2362436
+2017-06-20 07:03:09,664 INFO [main] org.apache.hadoop.mapreduce.lib.input.FileInputFormat: Total input paths to process : 1
+2017-06-20 07:03:09,686 INFO [main] org.apache.hadoop.mapreduce.lib.input.CombineFileInputFormat: DEBUG: Terminated node allocation with : CompletedNodes: 2, size left: 0
+2017-06-20 07:03:09,686 INFO [main] com.tencent.angel.master.data.DataSpliter: splits number=1
+2017-06-20 07:03:10,093 INFO [main] org.apache.hadoop.yarn.event.AsyncDispatcher: Registering class com.tencent.angel.master.worker.WorkerManagerEventType for class com.tencent.angel.master.worker.WorkerManager
+2017-06-20 07:03:10,094 INFO [main] org.apache.hadoop.yarn.event.AsyncDispatcher: Registering class com.tencent.angel.master.worker.workergroup.AMWorkerGroupEventType for class com.tencent.angel.master.AngelApplicationMaster$WorkerGroupEventHandler
+2017-06-20 07:03:10,095 INFO [main] org.apache.hadoop.yarn.event.AsyncDispatcher: Registering class com.tencent.angel.master.worker.worker.AMWorkerEventType for class com.tencent.angel.master.AngelApplicationMaster$WorkerEventHandler
+2017-06-20 07:03:10,102 INFO [main] org.apache.hadoop.yarn.event.AsyncDispatcher: Registering class com.tencent.angel.master.worker.attempt.WorkerAttemptEventType for class com.tencent.angel.master.AngelApplicationMaster$WorkerAttemptEventHandler
+2017-06-20 07:03:10,103 INFO [main] com.tencent.angel.master.AngelApplicationMaster: build WorkerManager success
+2017-06-20 07:03:10,104 INFO [main] org.apache.hadoop.yarn.event.AsyncDispatcher: Registering class com.tencent.angel.master.app.AppEventType for class com.tencent.angel.master.app.App
+2017-06-20 07:03:10,105 INFO [main] org.apache.hadoop.yarn.event.AsyncDispatcher: Registering class com.tencent.angel.master.app.AppFinishEventType for class com.tencent.angel.master.AngelApplicationMaster$AppFinishEventHandler
+2017-06-20 07:03:10,111 INFO [main] com.tencent.angel.master.MasterService: listen ip:10.8.177.25, port:21624
+2017-06-20 07:03:10,296 INFO [main] org.apache.hadoop.yarn.client.RMProxy: Connecting to ResourceManager at hd-23/10.8.177.23:8030
+2017-06-20 07:03:10,352 INFO [main] com.tencent.angel.master.deploy.ContainerLauncher: Upper limit on the thread pool size is 24
+2017-06-20 07:03:10,356 INFO [main] org.apache.hadoop.yarn.client.api.impl.ContainerManagementProtocolProxy: yarn.client.max-cached-nodemanagers-proxies : 0
+2017-06-20 07:03:10,488 INFO [main] org.mortbay.log: Logging to org.slf4j.impl.Log4jLoggerAdapter(org.mortbay.log) via org.mortbay.log.Slf4jLog
+2017-06-20 07:03:10,501 INFO [main] org.apache.hadoop.security.authentication.server.AuthenticationFilter: Unable to initialize FileSignerSecretProvider, falling back to use random secrets.
+2017-06-20 07:03:10,509 INFO [main] org.apache.hadoop.http.HttpRequestLog: Http request log for http.requests.angel is not defined
+2017-06-20 07:03:10,519 INFO [main] org.apache.hadoop.http.HttpServer2: Added global filter 'safety' (class=org.apache.hadoop.http.HttpServer2$QuotingInputFilter)
+2017-06-20 07:03:10,524 INFO [main] org.apache.hadoop.http.HttpServer2: Added filter AM_PROXY_FILTER (class=org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter) to context angel
+2017-06-20 07:03:10,524 INFO [main] org.apache.hadoop.http.HttpServer2: Added filter AM_PROXY_FILTER (class=org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter) to context static
+2017-06-20 07:03:10,529 INFO [main] org.apache.hadoop.http.HttpServer2: adding path spec: /angel/*
+2017-06-20 07:03:11,098 INFO [main] org.apache.hadoop.yarn.webapp.WebApps: Registered webapp guice modules
+2017-06-20 07:03:11,101 INFO [main] org.apache.hadoop.http.HttpServer2: Jetty bound to port 33261
+2017-06-20 07:03:11,101 INFO [main] org.mortbay.log: jetty-6.1.26
+2017-06-20 07:03:11,158 INFO [main] org.mortbay.log: Extract jar:file:/home/hadoop/configsets/hadoop_tmp/nm-local-dir/usercache/hadoop/filecache/83/angel-ps-core-1.0.0.jar!/webapps/angel to /tmp/Jetty_0_0_0_0_33261_angel____.m7ugr7/webapp
+2017-06-20 07:03:11,686 INFO [main] org.mortbay.log: Started HttpServer2$SelectChannelConnectorWithSafeStartup@0.0.0.0:33261
+2017-06-20 07:03:11,688 INFO [main] org.apache.hadoop.yarn.webapp.WebApps: Web app angel started at 33261
+2017-06-20 07:03:11,688 INFO [main] com.tencent.angel.master.AngelApplicationMaster: start webapp server success
+2017-06-20 07:03:11,689 INFO [main] com.tencent.angel.master.AngelApplicationMaster: webApp.port()=33261
+2017-06-20 07:03:11,707 INFO [main] com.tencent.angel.master.slowcheck.SlowChecker: slowCheckEnable = false, checkIntervalMs = 60000
+2017-06-20 07:03:11,734 INFO [main] com.tencent.angel.master.ps.ps.AMParameterServer: schedule ps server, psId: ParameterServer_0
+2017-06-20 07:03:11,761 INFO [main] com.tencent.angel.master.ps.ps.AMParameterServer: scheduling PSAttempt_0_0
+2017-06-20 07:03:11,769 INFO [main] com.tencent.angel.master.ps.ps.AMParameterServer: ParameterServer_0 AMParameterServer Transitioned from NEW to SCHEDULED
+2017-06-20 07:03:11,769 INFO [main] com.tencent.angel.master.AngelApplicationMaster: appAttemptId.getAttemptId()=1
+2017-06-20 07:03:11,770 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: allocate ps server attempt resource, ps attempt id = PSAttempt_0_0
+2017-06-20 07:03:11,771 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: PSAttempt_0_0 PSAttempt Transitioned from NEW to SCHEDULED
+2017-06-20 07:03:11,877 INFO [RMCommunicator Allocator] com.tencent.angel.master.deploy.ContainerAllocator: register am over
+2017-06-20 07:03:11,878 INFO [RMCommunicator Allocator] com.tencent.angel.master.deploy.ContainerAllocator: MaximumResourceCapability = <memory:8192, vCores:32>
+2017-06-20 07:03:11,878 INFO [RMCommunicator Allocator] com.tencent.angel.master.deploy.ContainerAllocator: register to rm success
+2017-06-20 07:03:21,886 INFO [RMCommunicator Allocator] com.tencent.angel.master.deploy.ContainerAllocator: ask request={Priority: 10, Capability: <memory:4096, vCores:1>, # Containers: 1, Location: *, Relax Locality: true}
+2017-06-20 07:03:32,190 INFO [RMCommunicator Allocator] com.tencent.angel.master.deploy.ContainerAllocator: Assigned container (Container: [ContainerId: container_1497953474156_0003_01_000002, NodeId: hd-24:43812, NodeHttpAddress: hd-24:8042, Resource: <memory:4096, vCores:1>, Priority: 10, Token: Token { kind: ContainerToken, service: 10.8.177.24:43812 }, ])  to task PSAttempt_0_0 on node hd-24:43812
+2017-06-20 07:03:32,211 INFO [AsyncDispatcher event handler] com.tencent.angel.master.yarn.util.ContainerContextUtils: The job-conf file on the remote FS is /tmp/hadoop-yarn/hadoop/.staging/application_1497953474156_0003/job.xml
+2017-06-20 07:03:32,211 INFO [AsyncDispatcher event handler] com.tencent.angel.master.yarn.util.ContainerContextUtils: actual workergroup number:1
+2017-06-20 07:03:32,211 INFO [AsyncDispatcher event handler] com.tencent.angel.master.yarn.util.ContainerContextUtils: actual task number:1
+2017-06-20 07:03:32,239 INFO [AsyncDispatcher event handler] com.tencent.angel.master.yarn.util.ContainerContextUtils: Adding #0 tokens and #0 secret keys for NM use for launching container
+2017-06-20 07:03:32,239 INFO [AsyncDispatcher event handler] com.tencent.angel.master.yarn.util.ContainerContextUtils: Size of containertokens_dob is 0
+2017-06-20 07:03:32,296 INFO [AsyncDispatcher event handler] com.tencent.angel.master.yarn.util.ParameterServerJVM: Command to launch container for PS is : $JAVA_HOME/bin/java  -Xmx3896M -Xmn1558M -XX:MaxDirectMemorySize=1024M -XX:SurvivorRatio=4 -XX:PermSize=100M -XX:MaxPermSize=200M -XX:+AggressiveOpts -XX:+UseLargePages -XX:+UseParallelGC -XX:+UseAdaptiveSizePolicy -XX:CMSInitiatingOccupancyFraction=70 -XX:+UseCMSInitiatingOccupancyOnly -XX:+CMSScavengeBeforeRemark -XX:+UseCMSCompactAtFullCollection -verbose:gc -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintCommandLineFlags -XX:+PrintTenuringDistribution -XX:+PrintAdaptiveSizePolicy -Xloggc:/tmp/angelgc-application_1497953474156_0003-PSAttempt_0_0.log -Djava.io.tmpdir=$PWD/tmp -Dlog4j.configuration=log/angel.properties -Dlog4j.logger.com.tencent.ml=DEBUG -Dyarn.app.container.log.dir=<LOG_DIR> -Dyarn.app.container.log.filesize=0 -Dhadoop.root.logger=INFO,CLA com.tencent.angel.ps.impl.ParameterServer 1><LOG_DIR>/stdout 2><LOG_DIR>/stderr 
+2017-06-20 07:03:32,296 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: PSAttempt_0_0 PSAttempt Transitioned from SCHEDULED to ASSIGNED
+2017-06-20 07:03:32,298 INFO [ContainerLauncher #0] com.tencent.angel.master.deploy.ContainerLauncher: Processing the event YarnContainerLauncherEvent [containerId=container_1497953474156_0003_01_000002, containerMgrAddress=hd-24:43812, containerToken=Token { kind: ContainerToken, service: 10.8.177.24:43812 }, toString()=ContainerLauncherEvent [id=PSAttempt_0_0]]
+2017-06-20 07:03:32,300 INFO [ContainerLauncher #0] com.tencent.angel.master.deploy.ContainerLauncher: Launching PSAttempt_0_0
+2017-06-20 07:03:32,301 INFO [ContainerLauncher #0] org.apache.hadoop.yarn.client.api.impl.ContainerManagementProtocolProxy: Opening proxy : hd-24:43812
+2017-06-20 07:03:32,367 INFO [AsyncDispatcher event handler] com.tencent.angel.master.MasterService: PSAttempt_0_0 is registered in monitor!
+2017-06-20 07:03:32,367 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: has telled attempt started for attempid: PSAttempt_0_0
+2017-06-20 07:03:32,367 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: PSAttempt_0_0 PSAttempt Transitioned from ASSIGNED to RUNNING
+2017-06-20 07:03:32,367 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.ps.AMParameterServer: ParameterServer_0 AMParameterServer Transitioned from SCHEDULED to RUNNING
+2017-06-20 07:03:42,192 INFO [RMCommunicator Allocator] com.tencent.angel.master.deploy.ContainerAllocator: ask request={Priority: 10, Capability: <memory:4096, vCores:1>, # Containers: 0, Location: *, Relax Locality: true}
+2017-06-20 07:04:32,724 ERROR [Heartbeat Timeout checker] com.tencent.angel.master.MasterService: PSAttempt_0_0 heartbeat timeout!!!
+2017-06-20 07:04:32,726 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: Diagnostics report from PSAttempt_0_0: heartbeat timeout
+2017-06-20 07:04:32,727 INFO [AsyncDispatcher event handler] com.tencent.angel.master.MasterService: PSAttempt_0_0 is finished,  delete it in monitor!
+2017-06-20 07:04:32,727 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: PSAttempt_0_0 PSAttempt Transitioned from RUNNING to FAILED
+2017-06-20 07:04:32,731 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.ps.AMParameterServer: scheduling PSAttempt_0_1
+2017-06-20 07:04:32,731 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: allocate ps server attempt resource, ps attempt id = PSAttempt_0_1
+2017-06-20 07:04:32,731 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: PSAttempt_0_1 PSAttempt Transitioned from NEW to SCHEDULED
+2017-06-20 07:04:32,733 INFO [ContainerLauncher #1] com.tencent.angel.master.deploy.ContainerLauncher: Processing the event YarnContainerLauncherEvent [containerId=container_1497953474156_0003_01_000002, containerMgrAddress=hd-24:43812, containerToken=Token { kind: ContainerToken, service: 10.8.177.24:43812 }, toString()=ContainerLauncherEvent [id=PSAttempt_0_0]]
+2017-06-20 07:04:32,733 INFO [ContainerLauncher #1] com.tencent.angel.master.deploy.ContainerLauncher: KILLING PSAttempt_0_0
+2017-06-20 07:04:32,734 INFO [ContainerLauncher #1] org.apache.hadoop.yarn.client.api.impl.ContainerManagementProtocolProxy: Opening proxy : hd-24:43812
+2017-06-20 07:04:32,765 INFO [ContainerLauncher #1] com.tencent.angel.master.deploy.ContainerLauncher: stop container success, containerMgrAddress:hd-24:43812
+2017-06-20 07:04:42,312 INFO [RMCommunicator Allocator] com.tencent.angel.master.deploy.ContainerAllocator: ask request={Priority: 10, Capability: <memory:4096, vCores:1>, # Containers: 1, Location: *, Relax Locality: true}
+2017-06-20 07:04:42,338 INFO [RMCommunicator Allocator] com.tencent.angel.master.deploy.ContainerAllocator: Received completed container:ContainerStatus: [ContainerId: container_1497953474156_0003_01_000002, State: COMPLETE, Diagnostics: Container killed by the ApplicationMaster.
+Container killed on request. Exit code is 143
+Container exited with a non-zero exit code 143
+, ExitStatus: -105, ]
+2017-06-20 07:04:42,339 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: Diagnostics report from PSAttempt_0_0: Container killed by the ApplicationMaster.
+Container killed on request. Exit code is 143
+Container exited with a non-zero exit code 143
+
+2017-06-20 07:04:52,361 INFO [RMCommunicator Allocator] com.tencent.angel.master.deploy.ContainerAllocator: Assigned container (Container: [ContainerId: container_1497953474156_0003_01_000003, NodeId: hd-24:43812, NodeHttpAddress: hd-24:8042, Resource: <memory:4096, vCores:1>, Priority: 10, Token: Token { kind: ContainerToken, service: 10.8.177.24:43812 }, ])  to task PSAttempt_0_1 on node hd-24:43812
+2017-06-20 07:04:52,362 INFO [AsyncDispatcher event handler] com.tencent.angel.master.yarn.util.ParameterServerJVM: Command to launch container for PS is : $JAVA_HOME/bin/java  -Xmx3896M -Xmn1558M -XX:MaxDirectMemorySize=1024M -XX:SurvivorRatio=4 -XX:PermSize=100M -XX:MaxPermSize=200M -XX:+AggressiveOpts -XX:+UseLargePages -XX:+UseParallelGC -XX:+UseAdaptiveSizePolicy -XX:CMSInitiatingOccupancyFraction=70 -XX:+UseCMSInitiatingOccupancyOnly -XX:+CMSScavengeBeforeRemark -XX:+UseCMSCompactAtFullCollection -verbose:gc -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintCommandLineFlags -XX:+PrintTenuringDistribution -XX:+PrintAdaptiveSizePolicy -Xloggc:/tmp/angelgc-application_1497953474156_0003-PSAttempt_0_1.log -Djava.io.tmpdir=$PWD/tmp -Dlog4j.configuration=log/angel.properties -Dlog4j.logger.com.tencent.ml=DEBUG -Dyarn.app.container.log.dir=<LOG_DIR> -Dyarn.app.container.log.filesize=0 -Dhadoop.root.logger=INFO,CLA com.tencent.angel.ps.impl.ParameterServer 1><LOG_DIR>/stdout 2><LOG_DIR>/stderr 
+2017-06-20 07:04:52,362 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: PSAttempt_0_1 PSAttempt Transitioned from SCHEDULED to ASSIGNED
+2017-06-20 07:04:52,365 INFO [ContainerLauncher #2] com.tencent.angel.master.deploy.ContainerLauncher: Processing the event YarnContainerLauncherEvent [containerId=container_1497953474156_0003_01_000003, containerMgrAddress=hd-24:43812, containerToken=Token { kind: ContainerToken, service: 10.8.177.24:43812 }, toString()=ContainerLauncherEvent [id=PSAttempt_0_1]]
+2017-06-20 07:04:52,365 INFO [ContainerLauncher #2] com.tencent.angel.master.deploy.ContainerLauncher: Launching PSAttempt_0_1
+2017-06-20 07:04:52,365 INFO [ContainerLauncher #2] org.apache.hadoop.yarn.client.api.impl.ContainerManagementProtocolProxy: Opening proxy : hd-24:43812
+2017-06-20 07:04:52,389 INFO [AsyncDispatcher event handler] com.tencent.angel.master.MasterService: PSAttempt_0_1 is registered in monitor!
+2017-06-20 07:04:52,389 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: has telled attempt started for attempid: PSAttempt_0_1
+2017-06-20 07:04:52,389 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: PSAttempt_0_1 PSAttempt Transitioned from ASSIGNED to RUNNING
+2017-06-20 07:05:02,362 INFO [RMCommunicator Allocator] com.tencent.angel.master.deploy.ContainerAllocator: ask request={Priority: 10, Capability: <memory:4096, vCores:1>, # Containers: 0, Location: *, Relax Locality: true}
+2017-06-20 07:05:52,744 ERROR [Heartbeat Timeout checker] com.tencent.angel.master.MasterService: PSAttempt_0_1 heartbeat timeout!!!
+2017-06-20 07:05:52,745 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: Diagnostics report from PSAttempt_0_1: heartbeat timeout
+2017-06-20 07:05:52,745 INFO [AsyncDispatcher event handler] com.tencent.angel.master.MasterService: PSAttempt_0_1 is finished,  delete it in monitor!
+2017-06-20 07:05:52,745 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.attempt.PSAttempt: PSAttempt_0_1 PSAttempt Transitioned from RUNNING to FAILED
+2017-06-20 07:05:52,746 INFO [AsyncDispatcher event handler] com.tencent.angel.master.ps.ps.AMParameterServer: ParameterServer_0 AMParameterServer Transitioned from RUNNING to FAILED
+2017-06-20 07:05:52,747 INFO [ContainerLauncher #3] com.tencent.angel.master.deploy.ContainerLauncher: Processing the event YarnContainerLauncherEvent [containerId=container_1497953474156_0003_01_000003, containerMgrAddress=hd-24:43812, containerToken=Token { kind: ContainerToken, service: 10.8.177.24:43812 }, toString()=ContainerLauncherEvent [id=PSAttempt_0_1]]
+2017-06-20 07:05:52,748 FATAL [AsyncDispatcher event handler] com.tencent.angel.master.app.InternalErrorEvent: PSAttempt_0_0 failed due to: heartbeat timeout
+PSAttempt_0_1 failed due to: heartbeat timeout
+2017-06-20 07:05:52,749 INFO [ContainerLauncher #3] com.tencent.angel.master.deploy.ContainerLauncher: KILLING PSAttempt_0_1
+2017-06-20 07:05:52,750 INFO [AsyncDispatcher event handler] com.tencent.angel.master.app.App: some error happened, InternalErrorEvent [errorMsg=PSAttempt_0_0 failed due to: heartbeat timeout
+PSAttempt_0_1 failed due to: heartbeat timeout, getType()=INTERNAL_ERROR]
+2017-06-20 07:05:52,750 INFO [AsyncDispatcher event handler] com.tencent.angel.master.app.App: application_1497953474156_0003Job Transitioned from NEW to FAILED
+2017-06-20 07:05:52,751 INFO [ContainerLauncher #3] org.apache.hadoop.yarn.client.api.impl.ContainerManagementProtocolProxy: Opening proxy : hd-24:43812
+2017-06-20 07:05:52,751 INFO [Thread-107] com.tencent.angel.master.AngelApplicationMaster: Calling stop for all the services
+2017-06-20 07:05:52,767 INFO [ContainerLauncher #3] com.tencent.angel.master.deploy.ContainerLauncher: stop container success, containerMgrAddress:hd-24:43812
+2017-06-20 07:05:52,775 INFO [Thread-107] com.tencent.angel.master.deploy.ContainerAllocator: to unregister from Yarn RM
+2017-06-20 07:05:52,776 INFO [Thread-107] com.tencent.angel.master.deploy.ContainerAllocator: Setting job diagnostics to PSAttempt_0_0 failed due to: heartbeat timeout
+PSAttempt_0_1 failed due to: heartbeat timeout
+
+2017-06-20 07:05:52,787 INFO [Thread-107] com.tencent.angel.master.deploy.ContainerAllocator: Waiting for application to be successfully unregistered.
+2017-06-20 07:06:02,802 INFO [Thread-107] com.tencent.angel.master.deploy.ContainerAllocator: ContainerAllocator service stop!
+2017-06-20 07:06:02,803 INFO [Thread-107] com.tencent.angel.master.oplog.AppStateStorage: app-state-writter service stop!
+2017-06-20 07:06:02,804 INFO [Thread-107] com.tencent.angel.master.AngelApplicationMaster: start to write app state to file and clear tmp directory
+2017-06-20 07:06:02,804 INFO [Thread-107] com.tencent.angel.master.AngelApplicationMaster: start to write app state to file hdfs://hd-23:6000/tmp/hadoop/application_1497953474156_0003_19ba4693-ec20-43eb-b94e-33cdf08a7c28/state
+2017-06-20 07:06:02,856 INFO [Thread-107] com.tencent.angel.master.app.App: write app report to file successfully jobReport {
+  jobState: J_FAILED
+  curIteration: 0
+  totalIteration: 100
+  diagnostics: "PSAttempt_0_0 failed due to: heartbeat timeout\nPSAttempt_0_1 failed due to: heartbeat timeout"
+}
+
+2017-06-20 07:06:02,875 INFO [Thread-107] com.tencent.angel.master.AngelApplicationMaster: write app state over
+2017-06-20 07:06:02,876 INFO [Thread-107] com.tencent.angel.master.AngelApplicationMaster: Deleting staging directory hdfs://hd-23:6000/ /tmp/hadoop-yarn/hadoop/.staging/application_1497953474156_0003
+2017-06-20 07:06:02,881 INFO [Thread-107] com.tencent.angel.master.AngelApplicationMaster: Deleting tmp output directory hdfs://hd-23:6000/tmp/hadoop/application_1497953474156_0003_0f523593-bbe8-46ee-8527-1cdc11eab5b4
+2017-06-20 07:06:12,884 INFO [Thread-107] com.tencent.angel.ipc.NettyServer: Stopping server on 21624
+2017-06-20 07:06:12,918 WARN [Heartbeat Timeout checker] com.tencent.angel.master.MasterService: Heartbeat Timeout checker is interupted
+2017-06-20 07:06:12,919 INFO [Thread-107] com.tencent.angel.master.MasterService: WorkerPSService is stoped!
+2017-06-20 07:06:12,919 INFO [Thread-107] com.tencent.angel.master.AngelApplicationMaster: Exiting Angel AppMaster..GoodBye!
+2017-06-20 07:06:12,922 INFO [Thread-1] com.tencent.angel.master.AngelApplicationMaster: AM received a signal. stop the app
